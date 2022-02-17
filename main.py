@@ -1,9 +1,6 @@
-from contextlib import suppress
-from PIL import Image
 import os
 
-from numpy import True_
-
+from config import *
 from patterns import *
 from algorithm import *
 from image import *
@@ -47,15 +44,17 @@ def algorithm():
     algorithmMenu()
 
 def algorithmMenu():
-    print('options: [0] back, [1] possible combinations')
+    print('options: [0] back, [1] WaifuMachine, [2] others')
     option = input('respost: ')
     if option == '0':
         menu()
     elif option == '1':
+        menuMachine()
+    elif option == '2':
         result = getMaxCombinations()
         print('\n'+'\033[92m'+'All possibles combinations is '+str(result)+' images\033[0m')
         print('you will continue with this...\n')
-    algorithm()
+        algorithm()
 
 def getFiles(path):
     files = []

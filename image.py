@@ -1,5 +1,6 @@
 from PIL import Image
 from background import *
+from config import *
 
 def addImage(image, source):
     new = Image.open(source).convert("RGBA")

@@ -1,10 +1,12 @@
 from PIL import Image
 import random
 
-use_background_colors = True
+from config import *
 
-width = 86
-height = 86
+use_background_colors = enable_background
+
+width = size_width
+height = size_height
 
 golden = {'r': 255, 'g': 188, 'b': 0, 'rarity': 15, 'name': 'golden'}
 silver = {'r': 178, 'g': 189, 'b': 191, 'rarity': 40, 'name': 'silver'}
@@ -14,11 +16,14 @@ blue =   {'r': 42, 'g': 110, 'b': 227, 'rarity': 30, 'name': 'blue'}
 list_background_colors = [golden, silver, red, blue]
 
 def createBackground():
-    rand = random.randint(1, 10)
-    if rand > 8:
-        background = pond(list_background_colors)
-        return Image.new("RGBA", (width, height), (background['r'], background['g'], background['b']))
-    return Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    if(use_background_colors):
+        rand = random.randint(1, 10)
+        if rand > 8:
+            background = pond(list_background_colors)
+            return Image.new("RGBA", (width, height), (background['r'], background['g'], background['b']))
+        return Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    else:
+        return Image.new("RGBA", (width, height), (0, 0, 0, 0))
     
 def pond(list):
     total = 0
