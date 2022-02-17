@@ -1,5 +1,8 @@
+from contextlib import suppress
 from PIL import Image
 import os
+
+from numpy import True_
 
 from patterns import *
 from algorithm import *
@@ -24,6 +27,7 @@ def menu():
     print("-"*50)
     if option == '1':
         createExample()
+        main()
     elif option == '2':
         manualInputs()
     elif option == '0':
@@ -96,25 +100,26 @@ def manualMenu(part, pattern_added):
             option = option + '.png'
             if thisArchiveExists(option,part['name']):
                 pattern_added.append({'file': option, 'directory': part['name']})
-                black_list.append({'file': option, 'directory': part['name']})
+                if 'linked' in part:
+                    black_list.append({'file': option, 'directory': part['parent'], 'font': part['name']})
                 print('\n'+'\033[92m'+'pattern added'+'\033[0m\n')
                 return
             else:
                 print('\n'+'\033[91m'+'pattern not found'+'\033[0m\n')
                 manualMenu(part, pattern_added)
 
-def isRarity(part):
+def drawRarity(part):
     if 'rarity' in part:
-        print('You can add pattern to '+'\033[1m'+part['name']+'\033[0m'+' in you image?')
-        print('options: [y] add pattern, [n] skip')
-        option = input('respost: ')
-        if option == 'y':
-            return True
-        elif option == 'n':
-            return False
-        print('\n')
+            print('You can add pattern to '+'\033[1m'+part['name']+'\033[0m'+' in you image?')
+            print('options: [y] add pattern, [any] no add pattern')
+            option = input('respost: ')
+            print('\n')
+            if option == 'y':
+                return True
+            else:
+                return False
     else:
-        return False
+        return True
 
 def isLinked(part):
     if 'linked' in part:
@@ -126,48 +131,53 @@ def isLinked(part):
                 #remove end of list
                 black_list.pop()
             print('\n')
-    return
+
 def blackListExist(name):
     for i in black_list:
         if i['directory'] == name:
             return True
     return False
-def thisFileReallyExist(part):
-    directory_name = ''
+def thisFileReallyExist(part, pattern_added):
+    suppress_name = ''
     file_name = ''
-    idx = 0
+    idx = -1
     for i in black_list:
-        if i[1] == part:
-            directory_name = i['directory']
+        if i['directory'] == part['name']:
+            suppress_name = i['font']
             file_name = i['file']
             idx = black_list.index(i)
 
-    file_slice = file_name.split(directory_name)
-    file_objetive = part+file_slice
-    print(file_objetive)
+    print(black_list)
+    name_split = file_name.split(suppress_name)
+    name = part['name']+name_split[1]
+    file_objetive = part['name']+'/'+name
+    
     if( not os.path.exists("resource/"+file_objetive) ):
         print('\033[91m'+'Error parent is not found')
-        print('Please insert other file in place'+'\033[0m\n')
+        print('Please, confirm the folder and logic in patterns.py'+'\033[0m\n')
         #remove art['name'] from black_list
         black_list.pop(idx)
-        return False
-    return True
+    else:
+        pattern_added.append({'file': name, 'directory': part['name']})
+        print('\n'+'\033[92m'+'pattern added'+'\033[0m\n')
+
         
+decided = True
 black_list = []      
 def manualInputs():
     pattern_added = []
-    print(patterns)
     for part in patterns:
-        print(isRarity(part))
-        print(blackListExist(part['name']))
-        if isRarity(part):
-            continue
-        else:
-            if(blackListExist(part['name'])):
+        if drawRarity(part):
+            if black_list.__len__() != 0:
+                if(blackListExist(part['name'])):
+                    thisFileReallyExist(part, pattern_added)
+                else:
+                    manualMenu(part, pattern_added)
+                    isLinked(part)
+            else:
                 manualMenu(part, pattern_added)
                 isLinked(part)
 
     createImage(pattern_added)
-    main()
 
 main()

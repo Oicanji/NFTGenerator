@@ -23,7 +23,7 @@ def getMaxCombinations():
 
     return some
 
-def genericPond():
+'''def genericPond():
     card = createBackground()
     card = addImage(card,"resource/hair-in-background/hair-in-background1_color1.png")
     card = addImage(card,"resource/face/face1_color1.png")
@@ -38,7 +38,7 @@ def genericPond():
 
     card.save("result/example.png", format="png")
     card.show()
-    return
+    return'''
     
 def automationWaifu():
     return
