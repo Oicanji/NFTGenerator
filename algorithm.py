@@ -8,8 +8,8 @@ from image import *
 from patterns import *
 
 def menuMachine():
-    #clear = lambda: os.system('cls')
-    #clear()
+    clear = lambda: os.system('cls')
+    clear()
     print("-"*50)
     print(' Welcome to Waifu Machine ')
     print('this is developed to new waifu born in world\n')
@@ -72,10 +72,15 @@ def randomWaifu():
     canvas = createBackground()
 
     for i in patterns:
-        #get a random item
-        item = random.choice(itensInFolder(i['name']))
-        #add the item to canvas
-        canvas = addImage(canvas,'resource/'+i['name']+'/'+item)
+        if 'rarity' in i:
+            rand = random.randint(0,100)
+            if rand <= i['rarity']:
+                item = random.choice(itensInFolder(i['name']))
+                canvas = addImage(canvas,'resource/'+i['name']+'/'+item)
+
+        else:
+            item = random.choice(itensInFolder(i['name']))
+            canvas = addImage(canvas,'resource/'+i['name']+'/'+item)
 
     if(use_custom_names):
         print('\n\033[91m not implement\033[0m\n')
@@ -85,23 +90,43 @@ def randomWaifu():
         canvas.save("result/"+name+"-virtual-waifu.png", format="png")
         waifu_in_cache.append(canvas)
     
-'''def genericPond():
-    card = createBackground()
-    card = addImage(card,"resource/hair-in-background/hair-in-background1_color1.png")
-    card = addImage(card,"resource/face/face1_color1.png")
-    card = addImage(card,"resource/bushes/bushes1_color1.png")
-    card = addImage(card,"resource/skinmark/skinmark1_color1.png")
-    card = addImage(card,"resource/noise/noise1_color1.png")
-    card = addImage(card,"resource/mouth/mouth1_color1.png")
-    card = addImage(card,"resource/eyebrow/eyebrow1_color1.png")
-    card = addImage(card,"resource/eyes/eyes1_color1.png")
-    card = addImage(card,"resource/hair-in-face/hair-in-face1_color1.png")
-    card = addImage(card,"resource/upper-head/upper-head1_color1.png")
+parent_cache = []
+def patternParent(part):
+    if 'linked' in part:
+        parent_cache.append(part['parent'])
+    return
 
-    card.save("result/example.png", format="png")
-    card.show()
-    return'''
+def verifyParent(part):
+    if part['name'] in parent_cache:
+        return True
+    return False
+
+def verifyRarity(part):
+    if 'rarity' in part:
+        rand = random.randint(0,100)
+        if rand <= part['rarity']:
+            return itensInFolder(part['name'])
+            canvas = addImage(canvas,'resource/'+part['name']+'/'+item)
+        return False
+    else:
+        return itensInFolder(part['name'])
+        canvas = addImage(canvas,'resource/'+part['name']+'/'+item)
+
+def searchInPart(Part, canvas):
+    if verifyParent(Part):
+        #aqui e quando o objeto e parente de alguem
+        return
+    else:
+        patternParent()
+        respost = verifyRarity(Part)
+        #if true, is draw
+        if respost != False:
+            #based in length of respost, get a random item or get other
+            return
     
+def addCanvas(url, canvas):
+    return addImage(canvas,'resource/'+url)
+
 def automationWaifu():
     return
 

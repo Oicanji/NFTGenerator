@@ -179,4 +179,5 @@ def manualInputs():
 
     createImage(pattern_added)
 
-main()
+if __name__ == "__main__":
+    main()
