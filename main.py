@@ -10,31 +10,41 @@ def cleared():
     clear()
 
 def main():
-    cleared()
     print("-"*50)
     print('hello world, to '+'\033[92m'+'NFT'+'\033[0m'+' generator')
     print('this is developed by '+'\033[93m'+'@Oicaji'+'\033[0m')
-    print('testing version, using WeirdoAnime from example')
+    print('APHA 0.1, original using WeirdoGirlsAnime from example')
+    print('\n')
+    print('This instance is using '+'\033[92m'+sufix_project+'\033[0m'+' project, to create collection of '+'\033[92m'+sufix_collection+'\033[0m'+' images')
     print("-"*50)
     menu()
 
 def menu():
-    print('options: [0] exit, [1] create example, [2] manual input images, [3] execute algorithm')
+    print("-"*50)
+    #print azul
+    print('\033[94m'+'TESTING MENU 0.2'+'\033[0m')
+    print('options: [0] exit, [1] create, [2] manual, [3] example [4] warnings')
     option = input('respost: ')
     print("-"*50)
-    if option == '1':
-        createExample()
-        main()
+    
+    cleared()
+    if option == '0':
+        exit()
+    elif option == '1':
+        menuMachine()
     elif option == '2':
         manualInputs()
-    elif option == '0':
-        exit()
     elif option == '3':
-        cleared()
-        algorithm()
+        createExample()
+    elif option == '4':
+        if(sufix_collection == 'AnimeFacesWeirdo'):
+            print('\n'+'\033[91m'+'You ate my creator?'+'\033[0m')
+            option = input('[y/n] respost: ')
+            print('\n'+'\033[92m'+'Wharever, enjoy!\033[0m')
+            print('\n'+'\033[92m'+'You are the best!\033[0m')
     else:
         print('invalid respost')
-        menu()
+    menu()
 
 def algorithm():
     print("-"*50)
@@ -44,7 +54,7 @@ def algorithm():
     algorithmMenu()
 
 def algorithmMenu():
-    print('options: [0] back, [1] WaifuMachine, [2] others')
+    print('options: [0] back, [1] '+sufix_project+' Behaviors, [2] others')
     option = input('respost: ')
     if option == '0':
         menu()
@@ -180,4 +190,6 @@ def manualInputs():
     createImage(pattern_added)
 
 if __name__ == "__main__":
+    
+    cleared()
     main()

@@ -33,6 +33,6 @@ def pond(list):
     for i in list:
         pond.append((i['rarity']*100) / total)
     rand = random.randint(1, 100)
-    for i in pond:
-        print('tem chance real de '+str(i)+'%')
+    #for i in pond:
+    #    print('tem chance real de '+str(i)+'%')
     return list[pond.index(min(pond, key=lambda x:abs(x-rand)))]

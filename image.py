@@ -1,6 +1,9 @@
 from PIL import Image
 from background import *
 from config import *
+from patterns import *
+import random
+import os
 
 def addImage(image, source):
     new = Image.open(source).convert("RGBA")
@@ -9,16 +12,10 @@ def addImage(image, source):
 
 def createExample():
     card = createBackground()
-    card = addImage(card,"resource/hair-in-background/hair-in-background1_color1.png")
-    card = addImage(card,"resource/face/face1_color1.png")
-    card = addImage(card,"resource/bushes/bushes1_color1.png")
-    card = addImage(card,"resource/skinmark/skinmark1_color1.png")
-    card = addImage(card,"resource/noise/noise1_color1.png")
-    card = addImage(card,"resource/mouth/mouth1_color1.png")
-    card = addImage(card,"resource/eyebrow/eyebrow1_color1.png")
-    card = addImage(card,"resource/eyes/eyes1_color1.png")
-    card = addImage(card,"resource/hair-in-face/hair-in-face1_color1.png")
-    card = addImage(card,"resource/upper-head/upper-head1_color1.png")
+    for i in patterns:
+        files = os.listdir('resource/'+i['name'])
+        file = random.choice(files)
+        card = addImage(card,'resource/'+i['name']+'/'+file)
 
     card.save("result/example.png", format="png")
     card.show()

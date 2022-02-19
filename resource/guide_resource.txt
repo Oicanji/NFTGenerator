@@ -36,10 +36,10 @@ attributes:
 //optional attributes
 rarity attributes:
     rare (50%) : _r
-    very rare (20%) : _v
-    epic (10%) : _e
-    legendary (5%) : _l
-    mythic (1%) : _m
+    very rare (35%) : _v
+    epic (15%) : _e
+    legendary (7%) : _l
+    mythic (2%) : _m
 
 //this this rarity will still be more specific, because in the end it will still be 
   fitted with common files and other different rarities...

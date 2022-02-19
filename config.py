@@ -1,3 +1,7 @@
+sufix_to_reference_obj = 'waifus'
+sufix_project = 'WaifusCreator'
+sufix_collection = 'AnimeFacesWeirdo'
+
 #this var is used to system khow if generate a background or not
 enable_background = True
 #if so generate a background transparent
@@ -5,6 +9,9 @@ enable_background = True
 #Size in pixels of the draw
 size_width = 86
 size_height = 86
+
+#instead porcent, this is parent variable, learn more in patterns.py
+instead_percentage = 40
 
 #use names custom or not
 use_custom_names = False
