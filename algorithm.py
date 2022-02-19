@@ -97,6 +97,8 @@ def randomObject():
     else:
         name = roboName()
         print('\n\033[96m Wild '+name.upper()+' the '+sufix_to_reference_obj+', appeared! \033[0m\n')
+        if has_resize:
+            canvas = resizeImage(canvas)
         canvas.save("result/"+name+"-"+sufix_to_reference_obj+".png", format="png")
         object_cache.append(canvas)
 

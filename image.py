@@ -24,4 +24,10 @@ def createImage(list_patterns):
     card = createBackground()
     for i in list_patterns:
         card = addImage(card,'resource/'+i['directory']+'/'+i['file'])
+    if has_resize:
+        card = resizeImage(card)
     card.save("result/new.png", format="png")
+
+def resizeImage(image):
+    image = image.resize((int(width*resize_width), int(height*resize_height),), Image.NEAREST)
+    return image

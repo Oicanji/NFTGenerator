@@ -10,6 +10,12 @@ enable_background = True
 size_width = 86
 size_height = 86
 
+has_resize = True
+
+#resize in porcentage
+resize_width = 3.520
+resize_height = 3.520
+
 #instead porcent, this is parent variable, learn more in patterns.py
 instead_percentage = 40
 
