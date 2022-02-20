@@ -9,7 +9,6 @@ def main():
     print("-"*50)
     print('hello world, to '+'\033[92m'+'NFT'+'\033[0m'+' generator')
     print('this is developed by '+'\033[93m'+'@Oicaji'+'\033[0m')
-    print('APHA 0.1, original using WeirdoGirlsAnime from example')
     print('\n')
     print('This instance is using '+'\033[92m'+sufix_project+'\033[0m'+' project, to create collection of '+'\033[92m'+sufix_collection+'\033[0m'+' images')
     print("-"*50)
