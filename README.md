@@ -19,10 +19,11 @@ Please read the patterns.py, config.py and guide_resource for more information t
   Filters from Family,Rarity,Amound and Parent working...
 </ul>
 <br>
+
+<p> <bold>Future Plains</bold> </p>
 <ol>
-    <li><bold>Future Plains</bold></li>
-    Names for Archives
-    Nicknames Script
-    Interface
-    Config.cfg
+    <li>Names for Archives</li>
+    <li>Nicknames Script</li>
+    <li>Interface</li>
+    <li>Config.cfg</li>
 </ol>
