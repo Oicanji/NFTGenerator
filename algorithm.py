@@ -1,8 +1,10 @@
+from distutils.command.clean import clean
 from pickle import TRUE
 from re import I
 import string
 import os
 from decimal import Decimal
+from turtle import clear
 
 from jmespath import search
 
@@ -20,10 +22,9 @@ def menuMachine():
 object_cache = []
 def opMachine():
     print('options: [0] exit, [1] create new '+sufix_to_reference_obj+', [2] show my last '+sufix_to_reference_obj+'.')
-    print(' '*9+'\033[93m'+'[3] create collection [2] create for you '+'\033[0m')
+    print(' '*9+'[3] create collection \033[93m [2] create for you '+'\033[0m')
     option = input('respost: ')
     print("-"*50)
-    
     clear = lambda: os.system('cls')
     clear()
     if option == '0':
@@ -34,26 +35,58 @@ def opMachine():
     elif option == '2':
         if object_cache == []:
             print('\033[91m'+'no have '+sufix_to_reference_obj+' in cache :( '+'\033[0m')
-            menuMachine()
         else:
             object_cache[object_cache.__len__()-1].show()
-            menuMachine()
     elif option == '3':
-        notImplemented()
-        menuMachine()
+        createColletion()
     elif option == '4':
         notImplemented()
-        menuMachine()
     else:
         print('\n\033[91minvalid respost \033[0m\n')
-        menuMachine()
+    menuMachine()
 
 def notImplemented():
     print('\n\033[91m not implemented \033[0m\n')
     print('\n\033[91m wait for update \033[0m\n')
 
+def createColletion():
+    print('\n\033[96m You You want to name your collection? \033[0m\n')
+    respost = input('[y/n]: ')
+    if respost == 'y':
+        name_loop = True
+        while name_loop:
+            clear = lambda: os.system('cls')
+            clear()
+            print('\n\033[96m Please, type the name of your collection: \033[0m\n')
+            name = input('name: ')
+            if ~folderExist(name) and name != '':
+                menuCollection(name)
+                name_loop = False
+            elif name == 'exit':
+                name_loop = False            
+    else:
+        #create paste name with combinations numers and letters
+        name_loop = True
+        while name_loop:
+            letters = string.ascii_uppercase
+            name = ''.join(random.choice(letters) for i in range(10))
+            if ~folderExist(name):
+                menuCollection(name)
+                name_loop = False
+
+def menuCollection(name):
+    clear()
+
+    
+#vefify if have a folder with name
+def folderExist(folder):
+    if os.path.exists("resource/"+folder):
+        return True
+    return False
+
 def itensInFolder(folder):
     return os.listdir('resource/'+folder)
+
 def getMaxCombinations():
     #with patterns route, get a list of items
     some = Decimal(0)

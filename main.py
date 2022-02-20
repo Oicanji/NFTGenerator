@@ -5,10 +5,6 @@ from patterns import *
 from algorithm import *
 from image import *
 
-def cleared():
-    clear = lambda: os.system('cls')
-    clear()
-
 def main():
     print("-"*50)
     print('hello world, to '+'\033[92m'+'NFT'+'\033[0m'+' generator')
@@ -27,7 +23,7 @@ def menu():
     option = input('respost: ')
     print("-"*50)
     
-    cleared()
+    clear()
     if option == '0':
         exit()
     elif option == '1':
@@ -190,6 +186,5 @@ def manualInputs():
     createImage(pattern_added)
 
 if __name__ == "__main__":
-    
-    cleared()
+    clear()
     main()

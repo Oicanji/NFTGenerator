@@ -1,3 +1,5 @@
+import os
+
 sufix_to_reference_obj = 'waifus'
 sufix_project = 'WaifusCreator'
 sufix_collection = 'AnimeFacesWeirdo'
@@ -28,3 +30,14 @@ use_custom_names = False
 # others names can appear on any drawing, randomly
 
 #use names desative, so system will use names similiar of children of Elon Musk
+
+#this is system to cached images
+#enabled if you full context for all images gerated
+#per default is false
+#but context works only in collection
+context_all = False
+
+#variables to use in all codes
+#to clear screen, if you want
+#no clear screen, if you dont want
+clear = lambda: os.system('cls')
