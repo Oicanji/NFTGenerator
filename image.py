@@ -31,3 +31,6 @@ def createImage(list_patterns):
 def resizeImage(image):
     image = image.resize((int(width*resize_width), int(height*resize_height),), Image.NEAREST)
     return image
+
+def saveImage(canva, name, local = "result/"):
+    canva.save(local+name+"-"+sufix_to_reference_obj+".png", format="png")

@@ -1,5 +1,7 @@
 import os
 
+from cv2 import multiply
+
 sufix_to_reference_obj = 'waifus'
 sufix_project = 'WaifusCreator'
 sufix_collection = 'AnimeFacesWeirdo'
@@ -36,6 +38,12 @@ use_custom_names = False
 #per default is false
 #but context works only in collection
 context_all = False
+
+#variable set difficulity of re use part
+multiply_difficulty = 90
+#recomend to use max 100
+#this if use to generate a random number of 0 to 100
+#and programmer less 5 after fustration tentative
 
 #variables to use in all codes
 #to clear screen, if you want

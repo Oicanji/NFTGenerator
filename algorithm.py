@@ -1,17 +1,14 @@
-from distutils.command.clean import clean
+from functools import cache
 from pickle import TRUE
-from re import I
 import string
 import os
 from decimal import Decimal
-from turtle import clear
-
-from jmespath import search
 
 from config import *
 from background import *
 from image import *
 from patterns import *
+from cache import *
 
 def menuMachine():
     print("-"*50)
@@ -19,24 +16,25 @@ def menuMachine():
     print('\033[96mthis is developed to new '+sufix_to_reference_obj+' born in world\033[0m\n')
     opMachine()
 
-object_cache = []
+last_instance = []
 def opMachine():
     print('options: [0] exit, [1] create new '+sufix_to_reference_obj+', [2] show my last '+sufix_to_reference_obj+'.')
     print(' '*9+'[3] create collection \033[93m [2] create for you '+'\033[0m')
     option = input('respost: ')
     print("-"*50)
-    clear = lambda: os.system('cls')
     clear()
     if option == '0':
         return
     elif option == '1':
-        randomObject()
+        result = randomObject()
+        print('\n\033[96m Wild '+result[1].upper()+' the '+sufix_to_reference_obj+', appeared! \033[0m\n')
+        saveImage(result[0], result[1])
         menuMachine()
     elif option == '2':
-        if object_cache == []:
+        if last_instance == []:
             print('\033[91m'+'no have '+sufix_to_reference_obj+' in cache :( '+'\033[0m')
         else:
-            object_cache[object_cache.__len__()-1].show()
+            last_instance[last_instance.__len__()-1].show()
     elif option == '3':
         createColletion()
     elif option == '4':
@@ -55,7 +53,6 @@ def createColletion():
     if respost == 'y':
         name_loop = True
         while name_loop:
-            clear = lambda: os.system('cls')
             clear()
             print('\n\033[96m Please, type the name of your collection: \033[0m\n')
             name = input('name: ')
@@ -76,8 +73,63 @@ def createColletion():
 
 def menuCollection(name):
     clear()
-
+    print('\n\033[96mWelcome to create collections options \033[0m\n')
+    print('\033[96mYou collection called by "'+name+'" \033[0m\n')
     
+    print("-"*50)
+    print('options: [0] cancel, [1] create 30 items collection, [2] create other size')
+    option = input('respost: ')
+    clear()
+    if option == '0':
+        return
+    elif option == '1':
+        createCollection(name, 30)
+    elif option == '2':
+        clear()
+        print('\n\033[96mWhich size do you want to put?\033[0m')
+        #print red
+        print('\033[91mCauntion: Oversize can crash your PC\033[0m')
+        print('\033[91m'+' '*11+'and it might take a while -_-\033[0m\n')
+        respost = input('size: ')
+        #verify if respost is a number
+        if respost.isdigit():
+            createCollection(name, int(respost))
+        else:
+            print('\n\033[91mInvalid respost\033[0m\n')
+            menuCollection(name)
+    else:
+        print('\n\033[91minvalid respost \033[0m\n')
+        menuCollection(name)
+
+def createCollection(name, range):
+    #create folder
+    path = "result/"+name+"/"
+    os.mkdir(path)
+
+    #habilitate cache
+    instance_ant = globalContextGet()
+    if ~globalContextGet():
+        globalContextSet(True)
+
+    i = 0
+    while range >= i:
+
+        clear()
+        print ('\n\033[96m'+'Creating: '+str(i+1)+' of '+str(range)+'\033[0m\n')
+        clear()
+
+        #create file
+        result = randomObject()
+        saveImage(result[0], result[1], path)
+        i += 1
+    
+    print('\n\033[96m Your collection called by '+name+' was created! \033[0m\n')
+
+    #disable cache
+    if ~instance_ant:
+        globalContextSet(False)
+
+
 #vefify if have a folder with name
 def folderExist(folder):
     if os.path.exists("resource/"+folder):
@@ -122,18 +174,25 @@ def randomObject():
     canvas = createBackground()
     for i in patterns:
         searchInPart(i, canvas)
-    instances.clear()
 
     if(use_custom_names):
         print('\n\033[91m custom names not implement \033[0m\n')
         print('\n\033[91m please desable in config.py \033[0m\n')
+        instances.clear()
     else:
         name = roboName()
-        print('\n\033[96m Wild '+name.upper()+' the '+sufix_to_reference_obj+', appeared! \033[0m\n')
+    
+        cacheCreate(name)
+
+        for instance in instances:
+            cacheAdd(name, instance)
         if has_resize:
             canvas = resizeImage(canvas)
-        canvas.save("result/"+name+"-"+sufix_to_reference_obj+".png", format="png")
-        object_cache.append(canvas)
+
+        last_instance.append(canvas)
+        instances.clear()
+
+        return canvas, name
 
 parent_cache = []
 def patternParent(part):
@@ -203,6 +262,9 @@ def fileToDict(file, family):
 def addInstances(file_dict):
     instances.append(file_dict)
 
+def getInstances():
+    return instances
+
 def addParent(parent,family):
     parent_dict = returnParent(parent)
     file_name = family+parent_dict['model']
@@ -247,45 +309,43 @@ def competition(list,part_attributes):
     competition_state = True
     while competition_state:
         rand = random.randint(0,items_available.__len__()-1)
-        #print(items_available[rand])
         model_winner = items_available[rand]
         tags = model_winner['tags']
-        if tags.__len__() == 0:
-            #no special tags
-            #print("\033[96m no special tag \033[0m")
-            competition_state = False
-        else:
-            #special tags
-            #print("\033[96m have special tag \033[0m")
-            rarity_tag = tags[0]
-            if rarity_tag == "r" or rarity_tag == "v" or rarity_tag == "e" or rarity_tag == "l" or rarity_tag == "m":
-                rarity_calc = rarityCalc(rarity_tag)
-                if rarity_calc:
-                    competition_state = False
+        in_cached = False
+        if(cache_all_files.__len__() > 0):
+            in_cached = existsInFamily(rand, part_attributes['name'])
+        if ~verifyCached(in_cached):
+            if tags.__len__() == 0:
+                #no special tags
+                competition_state = False
+            else:
+                #special tags
+                rarity_tag = tags[0]
+                if rarity_tag == "r" or rarity_tag == "v" or rarity_tag == "e" or rarity_tag == "l" or rarity_tag == "m":
+                    rarity_calc = rarityCalc(rarity_tag)
+                    if rarity_calc:
+                        competition_state = False
         if competition_state == True:
             model_winner = {}
             losers.append(items_available[rand])
-            #print error
             items_available.pop(rand)
-            #print("no winner, retry")
         if items_available.__len__() == 0:
-            #print("full reroll")
             items_available = losers
             losers = []
-
-    #print("Teh winner is "+model_winner['model']+" model to "+part_attributes['name']+",  used a "+model_winner['color']+" color")
-    #yellow print
-    #if model_winner['tags'].__len__() > 0:
-    #    print("\033[93m This rarity is:"+model_winner['tags'][0]+"\033[0m")
-
-    #if type(tags) == list:
-    #    if tags.__len__() > 0:
-    #        for tag in tags:
-    #            print("\033[91m"+"Special tag: "+tag+"\033[0m")
-    #        print("\n")
-
     model_winner['family'] = part_attributes['name']
     return model_winner
+
+def verifyCached(in_cached):
+    if context_all:
+        if in_cached:
+            multiplier = getMulyiplier(in_cached)
+            rand = random.randint(0,100)
+            if(rand > multiplier):
+                multiplierLess(in_cached)
+                return False
+            else:
+                return True
+    return False
 
 def analysisFile(file_name, family):
     tags = splitFilename(file_name)

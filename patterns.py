@@ -3,6 +3,7 @@
 #if you put a "linked" one, it will link by instances files with the same name in different folders 
 #"linked" = instead ... let the user or algorithm decide
 #"linked" = closed ...  links the linked files with a rule within the system and the link name
+#"linked" = color ... is similar to closed but the colors are not linked
 
 #"parent" = parent to the linked files
 #you must instantiate "parent" after the "linked", because it will be used to link the files
